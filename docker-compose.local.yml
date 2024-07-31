@@ -1,0 +1,30 @@
+version: "3.1"
+services:
+  api:
+    image: basic_sql_streamlit_chatbot:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - WORKERS=1
+    ports:
+      - "8501:8501"
+    restart: "unless-stopped"
+    env_file:
+      .env
+
+    volumes:
+      - ./app:/code/app
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - ./mysql-data:/var/lib/mysql
